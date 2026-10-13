@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Night Train · Bruxelles to Berlin</title>
+  <meta name="description" content="A night train from Brussels to Berlin, seen from the window. A scroll-driven parallax piece.">
+  <meta name="theme-color" content="#050708">
+  <link rel="icon" href="data:,">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap">
+  <link rel="preload" as="image" href="assets/s1-city-dusk.webp" fetchpriority="high">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="parallax.css">
+  <script src="parallax-fallback.js" defer></script>
+</head>
+<body>
+
+  <main class="journey">
+
+    <!-- 1 · Departure -->
+    <section class="scene scene--departure" aria-labelledby="t1">
+      <div class="stage">
+        <div class="layer layer--sky"><img src="assets/s1-city-dusk.webp" alt="" fetchpriority="high"></div>
+        <div class="layer layer--far   silhouette s1-city"></div>
+        <div class="layer layer--mid   silhouette s1-catenary"></div>
+        <div class="layer layer--near  silhouette s1-platform"></div>
+        <div class="layer layer--flare flares"></div>
+        <p class="caption"><time>21:47</time><span id="t1">Bruxelles-Midi</span></p>
+      </div>
+    </section>
+
+    <!-- 2 · Countryside, blue hour -->
+    <section class="scene scene--country" aria-labelledby="t2">
+      <div class="stage">
+        <div class="layer layer--sky"><img src="assets/s2-fog-field.webp" alt="" decoding="async"></div>
+        <div class="layer layer--far   silhouette s2-hills"></div>
+        <div class="haze"></div>
+        <div class="layer layer--mid   silhouette s2-trees"></div>
+        <div class="layer layer--near  silhouette s2-poles"></div>
+        <div class="layer layer--front silhouette s2-grass"></div>
+        <p class="caption"><time>22:31</time><span id="t2">Hesbaye</span></p>
+      </div>
+    </section>
+
+    <!-- 3 · Deep night, sodium light -->
+    <section class="scene scene--night" aria-labelledby="t3">
+      <div class="stage">
+        <div class="layer layer--sky"><img src="assets/s3-sodium-station.webp" alt="" decoding="async"></div>
+        <div class="layer layer--far   silhouette s3-industry"></div>
+        <div class="layer layer--mid   silhouette s3-yard"></div>
+        <div class="layer layer--near  silhouette s3-catenary"></div>
+        <div class="layer layer--flare flares"></div>
+        <div class="layer layer--glass rain"><i></i><i></i><i></i><i></i><i></i></div>
+        <p class="caption"><time>02:14</time><span id="t3">Hamm</span></p>
+      </div>
+    </section>
+
+    <!-- 4 · Arrival, dawn -->
+    <section class="scene scene--arrival" aria-labelledby="t4">
+      <div class="stage">
+        <div class="layer layer--sky"><img src="assets/s4-berlin-dawn.webp" alt="" decoding="async"></div>
+        <div class="layer layer--far   silhouette s4-blocks"></div>
+        <div class="layer layer--mid   silhouette s4-canopy"></div>
+        <div class="layer layer--near  silhouette s4-platform"></div>
+        <p class="caption"><time>06:58</time><span id="t4">Berlin Gesundbrunnen</span></p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 5 · The night, frame by frame: a horizontal scroll -->
+  <section class="reel" aria-label="The journey in six frames">
+    <div class="reel__pin">
+      <div class="layer layer--mid silhouette s4-blocks"></div>
+      <ol class="reel__track">
+        <li class="reel__frame"><div><img src="assets/s1-city-dusk.webp" alt="Brussels at dusk from a rooftop"></div><p><time>21:47</time> Bruxelles-Midi</p></li>
+        <li class="reel__frame"><div><img src="assets/reel-power-lines.webp" alt="Power lines over a misty field"></div><p><time>22:31</time> Hesbaye</p></li>
+        <li class="reel__frame"><div><img src="assets/reel-industry.webp" alt="An industrial plant lit up at night"></div><p><time>00:52</time> Köln</p></li>
+        <li class="reel__frame"><div><img src="assets/s3-sodium-station.webp" alt="A small station under sodium lamps"></div><p><time>02:14</time> Hamm</p></li>
+        <li class="reel__frame"><div><img src="assets/reel-fog-station.webp" alt="A platform in thick morning fog"></div><p><time>05:36</time> Spandau</p></li>
+        <li class="reel__frame"><div><img src="assets/s4-berlin-dawn.webp" alt="Berlin skyline at first light"></div><p><time>06:58</time> Berlin Gesundbrunnen</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <footer class="credits">
+    <p class="credits__end">End of the line</p>
+    <p class="credits__small">Photography from Unsplash · full credits in CREDITS.md</p>
+  </footer>
+
+  <!-- The glass between you and the world. These never scroll. -->
+  <div class="reflection" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="window" aria-hidden="true"></div>
+
+  <nav class="hud" aria-label="Journey">
+    <span class="hud__stop">BRU</span>
+    <span class="route"><span class="route__progress"></span></span>
+    <span class="hud__stop">BER</span>
+    <button class="hud__letterbox" type="button" aria-pressed="false">2.39 : 1</button>
+  </nav>
+
+  <script>
+    // Letterbox toggle: the window narrows to a 2.39:1 frame.
+    const lb = document.querySelector('.hud__letterbox');
+    lb.addEventListener('click', () => {
+      const on = document.body.classList.toggle('letterbox');
+      lb.setAttribute('aria-pressed', on);
+    });
+  </script>
+</body>
+</html>

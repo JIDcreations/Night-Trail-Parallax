@@ -1,0 +1,402 @@
+/* =========================================================
+   style.css: look, grade and layout.
+   The motion lives in parallax.css.
+   ========================================================= */
+
+:root {
+  --ink: #050708;          /* crushed black */
+  --carriage: #07090a;     /* the train wall around the window */
+  --teal: #0f3b43;
+  --sodium: #ff8b2b;
+  --amber: #f0a35c;
+  --paper: #e9e1d4;        /* warm off-white for type */
+  --muted: rgba(233, 225, 212, .58);
+
+  --serif: "Instrument Serif", "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* window geometry */
+  --win-side: clamp(10px, 2vw, 28px);
+  --win-top: clamp(10px, 2vw, 28px);
+  --win-bottom: clamp(56px, 8vh, 76px);
+  --win-radius: clamp(14px, 2.4vw, 34px);
+
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { background: var(--ink); }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--serif);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* ---------------------------------------------------------- stage & layers */
+
+.stage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--ink);
+}
+
+.layer {
+  position: absolute;
+  inset: 0 auto 0 0;
+}
+
+.layer--sky img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--photo-pos, center);
+}
+
+.silhouette {
+  top: auto;
+  bottom: 0;
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  background-position: left bottom;
+}
+
+/* Scene 1: departure, dusk */
+.s1-city      { background-image: url(assets/svg/s1-city.svg);      height: 30%; opacity: .9; }
+.s1-catenary  { background-image: url(assets/svg/s1-catenary.svg);  height: 74%; }
+.s1-platform  { background-image: url(assets/svg/s1-platform.svg);  height: 64%; }
+
+/* Scene 2: countryside, blue hour */
+.s2-hills     { background-image: url(assets/svg/s2-hills.svg);     height: 30%; opacity: .85; }
+.s2-trees     { background-image: url(assets/svg/s2-trees.svg);     height: 34%; }
+.s2-poles     { background-image: url(assets/svg/s2-poles.svg);     height: 96%; }
+.s2-grass     { background-image: url(assets/svg/s2-grass.svg);     height: 20%; }
+
+/* Scene 3: deep night, industry under sodium light */
+.s3-industry  { background-image: url(assets/svg/s3-industry.svg);  height: 46%; }
+.s3-yard      { background-image: url(assets/svg/s3-yard.svg);      height: 50%; }
+.s3-catenary  { background-image: url(assets/svg/s3-catenary.svg);  height: 94%; }
+
+/* Scene 4: arrival, dawn */
+.s4-blocks    { background-image: url(assets/svg/s4-blocks.svg);    height: 26%; opacity: .8; }
+.s4-canopy    { background-image: url(assets/svg/s4-canopy.svg);    height: 100%; background-position: left top; }
+.s4-platform  { background-image: url(assets/svg/s4-platform.svg);  height: 60%; }
+
+/* Fog that sits between the hills and the tree line */
+.haze {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 46%;
+  background: linear-gradient(to top, rgba(120, 150, 165, .0) 0%, rgba(120, 150, 165, .22) 45%, transparent 100%);
+}
+
+/* The grade is baked into the photos (tools/grade-photos.py), so nothing here
+   has to blend while scrolling. Only the crop differs per scene. */
+.scene--departure { --photo-pos: center 62%; }
+.scene--country   { --photo-pos: center 40%; }
+.scene--night     { --photo-pos: center 30%; }
+.scene--arrival   { --photo-pos: center 70%; }
+
+/* ---------------------------------------------------------- light & glass */
+
+/* Sodium streetlights: one flare per tile, an anamorphic streak through it. */
+.flares {
+  background:
+    radial-gradient(closest-side, rgba(255, 178, 102, .55), rgba(255, 128, 44, .16) 38%, transparent) 0 14% / 46vw 46vw repeat-x,
+    linear-gradient(90deg, transparent 15%, rgba(255, 160, 80, .3) 50%, transparent 85%) 0 calc(14% + 23vw) / 46vw 2px repeat-x,
+    radial-gradient(closest-side, rgba(255, 150, 70, .28), transparent) 19vw 70% / 73vw 32vw repeat-x;
+}
+
+.scene--departure .flares { opacity: .45; }
+
+.rain {
+  background: url(assets/fx-rain-glass.webp) center / cover;
+  opacity: .13;
+}
+
+.rain i {
+  position: absolute;
+  width: 16vw;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 210, 170, .7));
+  rotate: -14deg;
+  opacity: 0;
+  animation: streak 3.4s cubic-bezier(.4, 0, .9, .6) infinite;
+}
+
+.rain i:nth-child(1) { top: 18%; left: 62%; animation-delay: .2s; }
+.rain i:nth-child(2) { top: 34%; left: 80%; animation-delay: 1.4s; animation-duration: 4.1s; }
+.rain i:nth-child(3) { top: 52%; left: 48%; animation-delay: 2.3s; }
+.rain i:nth-child(4) { top: 26%; left: 30%; animation-delay: 3.1s; animation-duration: 2.8s; }
+.rain i:nth-child(5) { top: 66%; left: 70%; animation-delay: .9s;  animation-duration: 4.6s; }
+
+@keyframes streak {
+  0%   { translate: 0 0; opacity: 0; }
+  15%  { opacity: .8; }
+  100% { translate: -26vw 6vw; opacity: 0; }
+}
+
+/* The window: a rounded opening in the carriage wall. */
+.window {
+  position: fixed;
+  inset: var(--win-top) var(--win-side) var(--win-bottom);
+  border-radius: var(--win-radius);
+  box-shadow:
+    0 0 0 200vmax var(--carriage),
+    inset 0 0 0 1px rgba(255, 255, 255, .07),
+    inset 0 1px 0 1px rgba(255, 255, 255, .05),
+    inset 0 0 90px 10px rgba(0, 0, 0, .65);
+  pointer-events: none;
+  z-index: 20;
+  transition: inset 1.1s cubic-bezier(.65, 0, .25, 1);
+}
+
+body.letterbox {
+  --lb: max(var(--win-top), calc((100vh - (100vw - 2 * var(--win-side)) / 2.39) / 2));
+}
+body.letterbox .window { inset: var(--lb) var(--win-side) max(var(--win-bottom), var(--lb)); }
+
+/* A faint reflection of the lit compartment on the glass. */
+.reflection {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 15;
+  background:
+    linear-gradient(112deg, transparent 38%, rgba(255, 240, 220, .022) 46%, transparent 47%, transparent 52%, rgba(255, 240, 220, .014) 55%, transparent 60%),
+    radial-gradient(40vw 30vh at 84% 92%, rgba(255, 168, 90, .1), transparent 70%),
+    linear-gradient(to bottom, rgba(220, 235, 240, .05), transparent 14%);
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 16;
+  background: radial-gradient(ellipse 75% 70% at 50% 46%, transparent 55%, rgba(0, 0, 0, .72));
+}
+
+.grain {
+  position: fixed;
+  inset: -8%;
+  pointer-events: none;
+  z-index: 17;
+  opacity: .045;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain .9s steps(1) infinite;
+}
+
+@keyframes grain {
+  0%   { translate: 0 0; }
+  20%  { translate: -3% 2%; }
+  40%  { translate: 2% -4%; }
+  60%  { translate: -4% -1%; }
+  80%  { translate: 3% 3%; }
+}
+
+/* ---------------------------------------------------------- type */
+
+.caption time,
+.hud,
+.reel__frame time,
+.credits__small {
+  font-family: var(--mono);
+  font-weight: 300;
+  font-size: clamp(10px, .78vw, 12px);
+  letter-spacing: .28em;
+  text-transform: uppercase;
+}
+
+.caption {
+  position: absolute;
+  left: calc(var(--win-side) + clamp(20px, 5vw, 80px));
+  bottom: calc(var(--win-bottom) + clamp(28px, 7vh, 90px));
+  margin: 0;
+  display: grid;
+  gap: .5rem;
+  max-width: min(36rem, 80vw);
+  z-index: 5;
+  text-shadow: 0 1px 24px rgba(0, 0, 0, .6);
+}
+
+.caption time { color: var(--amber); }
+
+.caption span {
+  font-size: clamp(2rem, 4.4vw, 4.2rem);
+  line-height: 1;
+}
+
+
+
+/* ---------------------------------------------------------- credits */
+
+.credits {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1.4rem;
+  padding: 10vh 10vw calc(var(--win-bottom) + 10vh);
+  text-align: center;
+  background: var(--ink);
+}
+
+.credits__end {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-style: italic;
+}
+
+.credits__small { margin: 0; color: var(--muted); }
+
+/* ---------------------------------------------------------- the reel (horizontal scroll) */
+
+.reel {
+  position: relative;
+  z-index: 10;
+  background: var(--ink);
+}
+
+/* a soft edge, so the reel rises out of the dawn instead of sliding over it */
+.reel::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  height: 70vh;
+  background: linear-gradient(transparent, #0a1418);
+}
+
+.reel__pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #0a1418 0%, #1a2226 55%, #3a2a22 100%);
+}
+
+.reel .s4-blocks { height: 34%; opacity: .35; }
+
+.reel__track {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: flex;
+  align-items: center;
+  gap: 8vw;
+  width: max-content;
+  margin: 0;
+  padding: 0 20vw;
+  list-style: none;
+}
+
+.reel__frame {
+  width: 40vw;
+  margin: 0;
+}
+
+.reel__frame:nth-child(even) { translate: 0 6vh; }
+
+.reel__frame div {
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: 2px;
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .7);
+}
+
+.reel__frame img {
+  display: block;
+  width: 120%;
+  height: 100%;
+  margin-left: -10%;
+  object-fit: cover;
+}
+
+.reel__frame p {
+  margin: 1rem 0 0;
+  font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+  color: var(--paper);
+}
+
+.reel__frame time { color: var(--amber); margin-right: .8em; }
+
+@media (max-width: 640px) {
+  .reel__track { gap: 10vw; padding: 0 14vw; }
+  .reel__frame { width: 72vw; }
+}
+
+/* ---------------------------------------------------------- hud on the carriage wall */
+
+.hud {
+  position: fixed;
+  z-index: 30;
+  left: calc(var(--win-side) + 8px);
+  right: calc(var(--win-side) + 8px);
+  bottom: 0;
+  height: var(--win-bottom);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--muted);
+}
+
+.route {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: rgba(233, 225, 212, .16);
+}
+
+.route__progress {
+  position: absolute;
+  inset: 0;
+  background: var(--amber);
+  transform-origin: left;
+}
+
+.route__progress::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 12px var(--sodium);
+}
+
+.hud__letterbox {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  background: none;
+  border: 1px solid rgba(233, 225, 212, .2);
+  border-radius: 999px;
+  padding: 6px 12px;
+  margin-left: 12px;
+  cursor: pointer;
+  transition: color .3s, border-color .3s;
+}
+
+.hud__letterbox:hover,
+.hud__letterbox[aria-pressed="true"] { color: var(--paper); border-color: var(--amber); }
+.hud__letterbox:focus-visible { outline: 1px solid var(--amber); outline-offset: 3px; }
+
+@media (max-width: 640px) {
+  .hud__letterbox { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain, .rain i { animation: none; }
+  .window { transition: none; }
+}

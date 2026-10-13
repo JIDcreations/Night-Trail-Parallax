@@ -1,0 +1,70 @@
+/* =========================================================
+   parallax.css: the whole parallax effect, nothing else.
+   Scroll down = the train moves = every layer slides left.
+   Far things slide slowly, near things fast. That's parallax.
+   ========================================================= */
+
+:root { --travel: 100vw; }   /* how far a speed-1 layer moves per scene */
+
+/* 1. Each scene is a tall section. Its view timeline tracks
+      how far it has passed through the viewport. */
+.scene {
+  height: 300vh;
+  view-timeline: --scene block;
+}
+
+/* 2. One animation for every layer: slide left by speed × travel. */
+@keyframes travel {
+  to { translate: calc(var(--speed) * var(--travel) * -1) 0; }
+}
+
+.layer {
+  width: calc(100% + var(--speed) * var(--travel)); /* wide enough to never run out */
+  animation: travel linear both;
+  animation-timeline: --scene;   /* driven by scroll, not by time */
+  animation-range: cover;        /* from the moment the scene enters until it leaves */
+}
+
+/* 3. Depth = speed. */
+.layer--sky   { --speed: 0.04; } /* sky, horizon: almost still */
+.layer--far   { --speed: 0.15; } /* skylines, hills, industry */
+.layer--mid   { --speed: 0.4;  } /* tree lines, overhead wires, warehouses */
+.layer--near  { --speed: 1;    } /* poles, masts, platforms */
+.layer--front { --speed: 1.8;  } /* grass by the track: a blur */
+.layer--flare { --speed: 2;    } /* streetlights sweeping past the glass */
+.layer--glass { --speed: 0;    } /* rain on the window travels with you */
+
+/* 4. Scenes crossfade. Fully faded scenes are hidden, so the browser skips them. */
+@keyframes scene-fade {
+  entry 0%            { opacity: 0; visibility: hidden; }
+  entry 100%, exit 0% { opacity: 1; visibility: visible; }
+  exit 100%           { opacity: 0; visibility: hidden; }
+}
+
+.stage {
+  animation: scene-fade linear both;
+  animation-timeline: --scene;
+}
+
+/* 5. The classic horizontal scroll: scrolling down moves a pinned track sideways. */
+.reel {
+  height: 500vh;
+  view-timeline: --reel block;
+  --travel: 220vw;               /* about the track's own trip, so speed 1 = the photos */
+}
+
+@keyframes slide { to { translate: calc(-100% + 100vw) 0; } }  /* until the track's end meets the screen's edge */
+@keyframes drift { from { translate: -8% 0; } to { translate: 8% 0; } }
+
+.reel__track     { animation: slide linear both; animation-timeline: --reel; animation-range: contain; }
+.reel__frame img { animation: drift linear both; animation-timeline: --reel; animation-range: contain; } /* photos lag inside their frames */
+.reel .layer     { animation-timeline: --reel; animation-range: contain; } /* the skyline behind moves slower */
+
+/* 6. The route bar at the bottom fills with the page-wide scroll() timeline. */
+@keyframes fill { from { scale: 0 1; } }
+.route__progress { animation: fill linear both; animation-timeline: scroll(root); }
+
+/* 7. Reduced motion: layers stand still, scenes still fade. */
+@media (prefers-reduced-motion: reduce) {
+  .layer, .reel__frame img { animation: none; }
+}
