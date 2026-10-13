@@ -1,6 +1,6 @@
 /* =========================================================
    style.css: look, grade and layout.
-   The motion lives in parallax.css.
+   No parallax in here. The motion lives in parallax.css.
    ========================================================= */
 
 :root {
@@ -306,12 +306,27 @@ body.letterbox .window { inset: var(--lb) var(--win-side) max(var(--win-bottom),
 
 .reel__frame:nth-child(even) { translate: 0 6vh; }
 
+.reel__marker {
+  align-self: center;
+  writing-mode: vertical-rl;
+  rotate: 180deg;
+  font-family: var(--mono);
+  font-weight: 300;
+  font-size: clamp(10px, .78vw, 12px);
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
 .reel__frame div {
   aspect-ratio: 3 / 2;
   overflow: hidden;
   border-radius: 2px;
   box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .7);
 }
+
+.reel__frame--tall { width: 22vw; }
+.reel__frame--tall div { aspect-ratio: 4 / 5; }
 
 .reel__frame img {
   display: block;
@@ -332,6 +347,7 @@ body.letterbox .window { inset: var(--lb) var(--win-side) max(var(--win-bottom),
 @media (max-width: 640px) {
   .reel__track { gap: 10vw; padding: 0 14vw; }
   .reel__frame { width: 72vw; }
+  .reel__frame--tall { width: 52vw; }
 }
 
 /* ---------------------------------------------------------- hud on the carriage wall */

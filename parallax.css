@@ -1,19 +1,29 @@
-/* =========================================================
-   parallax.css: the whole parallax effect, nothing else.
-   Scroll down = the train moves = every layer slides left.
-   Far things slide slowly, near things fast. That's parallax.
-   ========================================================= */
+/* ███████████████████████████████████████████████████████████
+   ██  PARALLAX.CSS: every line of the parallax lives here.   ██
+   ██  Scroll down = the train moves = layers slide left.     ██
+   ██  Far things slide slowly, near things fast.             ██
+   ███████████████████████████████████████████████████████████ */
 
 :root { --travel: 100vw; }   /* how far a speed-1 layer moves per scene */
 
-/* 1. Each scene is a tall section. Its view timeline tracks
-      how far it has passed through the viewport. */
+
+/* ═══════════════════════════════════════════════════════════
+   STEP 1 · THE SCROLL TIMELINE
+   Each scene is a tall section. view-timeline turns
+   "how far has this section scrolled past?" into 0% → 100%.
+   ═══════════════════════════════════════════════════════════ */
+
 .scene {
   height: 300vh;
   view-timeline: --scene block;
 }
 
-/* 2. One animation for every layer: slide left by speed × travel. */
+
+/* ═══════════════════════════════════════════════════════════
+   STEP 2 · ONE ANIMATION FOR EVERY LAYER
+   Slide left by speed × travel, driven by scroll, not by time.
+   ═══════════════════════════════════════════════════════════ */
+
 @keyframes travel {
   to { translate: calc(var(--speed) * var(--travel) * -1) 0; }
 }
@@ -21,11 +31,16 @@
 .layer {
   width: calc(100% + var(--speed) * var(--travel)); /* wide enough to never run out */
   animation: travel linear both;
-  animation-timeline: --scene;   /* driven by scroll, not by time */
+  animation-timeline: --scene;   /* ← the scroll timeline from step 1 */
   animation-range: cover;        /* from the moment the scene enters until it leaves */
 }
 
-/* 3. Depth = speed. */
+
+/* ═══════════════════════════════════════════════════════════
+   STEP 3 · DEPTH = SPEED   ◀◀◀  THIS IS THE PARALLAX
+   Same animation, different speed per layer. That's all it is.
+   ═══════════════════════════════════════════════════════════ */
+
 .layer--sky   { --speed: 0.04; } /* sky, horizon: almost still */
 .layer--far   { --speed: 0.15; } /* skylines, hills, industry */
 .layer--mid   { --speed: 0.4;  } /* tree lines, overhead wires, warehouses */
@@ -34,7 +49,13 @@
 .layer--flare { --speed: 2;    } /* streetlights sweeping past the glass */
 .layer--glass { --speed: 0;    } /* rain on the window travels with you */
 
-/* 4. Scenes crossfade. Fully faded scenes are hidden, so the browser skips them. */
+
+/* ═══════════════════════════════════════════════════════════
+   STEP 4 · SCENES CROSSFADE
+   Fade in as a scene enters, out as it leaves.
+   Fully faded scenes are hidden, so the browser skips them.
+   ═══════════════════════════════════════════════════════════ */
+
 @keyframes scene-fade {
   entry 0%            { opacity: 0; visibility: hidden; }
   entry 100%, exit 0% { opacity: 1; visibility: visible; }
@@ -46,11 +67,17 @@
   animation-timeline: --scene;
 }
 
-/* 5. The classic horizontal scroll: scrolling down moves a pinned track sideways. */
+
+/* ═══════════════════════════════════════════════════════════
+   STEP 5 · HORIZONTAL SCROLL (the reel at the end)
+   Scrolling down moves a pinned track sideways,
+   with parallax inside it too.
+   ═══════════════════════════════════════════════════════════ */
+
 .reel {
-  height: 500vh;
+  height: 700vh;
   view-timeline: --reel block;
-  --travel: 220vw;               /* about the track's own trip, so speed 1 = the photos */
+  --travel: 330vw;               /* about the track's own trip, so speed 1 = the photos */
 }
 
 @keyframes slide { to { translate: calc(-100% + 100vw) 0; } }  /* until the track's end meets the screen's edge */
@@ -60,11 +87,16 @@
 .reel__frame img { animation: drift linear both; animation-timeline: --reel; animation-range: contain; } /* photos lag inside their frames */
 .reel .layer     { animation-timeline: --reel; animation-range: contain; } /* the skyline behind moves slower */
 
-/* 6. The route bar at the bottom fills with the page-wide scroll() timeline. */
+
+/* ───────────────────────────────────────────────────────────
+   EXTRAS
+   ─────────────────────────────────────────────────────────── */
+
+/* Route bar at the bottom: fills with the whole page's scroll() timeline. */
 @keyframes fill { from { scale: 0 1; } }
 .route__progress { animation: fill linear both; animation-timeline: scroll(root); }
 
-/* 7. Reduced motion: layers stand still, scenes still fade. */
+/* Reduced motion: layers stand still, scenes still fade. */
 @media (prefers-reduced-motion: reduce) {
   .layer, .reel__frame img { animation: none; }
 }

@@ -14,12 +14,24 @@
   <link rel="preload" as="image" href="assets/s1-city-dusk.webp" fetchpriority="high">
 
   <link rel="stylesheet" href="style.css">
+  <!-- ▶ PARALLAX: all of it is in parallax.css (steps 1–5) -->
   <link rel="stylesheet" href="parallax.css">
   <script src="parallax-fallback.js" defer></script>
 </head>
 <body>
 
   <main class="journey">
+
+    <!-- ═══════════════════════════════════════════════════════
+         ▶ PARALLAX LAYERS
+         Each scene stacks layers from far to near.
+         The class sets the speed (parallax.css, step 3):
+           layer--sky   0.04   barely moves
+           layer--far   0.15
+           layer--mid   0.4
+           layer--near  1
+           layer--front 1.8    fastest
+         ═══════════════════════════════════════════════════════ -->
 
     <!-- 1 · Departure -->
     <section class="scene scene--departure" aria-labelledby="t1">
@@ -72,8 +84,8 @@
 
   </main>
 
-  <!-- 5 · The night, frame by frame: a horizontal scroll -->
-  <section class="reel" aria-label="The journey in six frames">
+  <!-- ▶ HORIZONTAL SCROLL: parallax.css, step 5 -->
+  <section class="reel" aria-label="The journey, frame by frame">
     <div class="reel__pin">
       <div class="layer layer--mid silhouette s4-blocks"></div>
       <ol class="reel__track">
@@ -83,13 +95,17 @@
         <li class="reel__frame"><div><img src="assets/s3-sodium-station.webp" alt="A small station under sodium lamps"></div><p><time>02:14</time> Hamm</p></li>
         <li class="reel__frame"><div><img src="assets/reel-fog-station.webp" alt="A platform in thick morning fog"></div><p><time>05:36</time> Spandau</p></li>
         <li class="reel__frame"><div><img src="assets/s4-berlin-dawn.webp" alt="Berlin skyline at first light"></div><p><time>06:58</time> Berlin Gesundbrunnen</p></li>
+        <li class="reel__marker">Berlin, after</li>
+        <li class="reel__frame reel__frame--tall"><div><img src="assets/own-fernsehturm.webp" alt="The Fernsehturm under a grey evening sky"></div><p><time>17:18</time> Mitte</p></li>
+        <li class="reel__frame reel__frame--tall"><div><img src="assets/own-streetlamp.webp" alt="A streetlamp lighting a tree at night, slightly blurred"></div><p><time>00:28</time> Berlin</p></li>
+        <li class="reel__frame reel__frame--tall"><div><img src="assets/own-tower-dawn.webp" alt="An apartment tower in silhouette against the dawn"></div><p><time>05:08</time> Berlin</p></li>
       </ol>
     </div>
   </section>
 
   <footer class="credits">
     <p class="credits__end">End of the line</p>
-    <p class="credits__small">Photography from Unsplash · full credits in CREDITS.md</p>
+    <p class="credits__small">Berlin photographs my own · others from Unsplash · see CREDITS.md</p>
   </footer>
 
   <!-- The glass between you and the world. These never scroll. -->
