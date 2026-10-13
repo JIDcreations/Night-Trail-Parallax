@@ -362,7 +362,7 @@ body.letterbox .window { inset: var(--lb) var(--win-side) max(var(--win-bottom),
   position: fixed;
   z-index: 30;
   left: calc(var(--win-side) + 8px);
-  right: calc(var(--win-side) + 8px);
+  right: calc(var(--win-side) + 220px);  /* keeps the bottom-right corner free for the Netlify badge */
   bottom: 0;
   height: var(--win-bottom);
   display: flex;
@@ -406,7 +406,6 @@ body.letterbox .window { inset: var(--lb) var(--win-side) max(var(--win-bottom),
   border: 1px solid rgba(233, 225, 212, .2);
   border-radius: 999px;
   padding: 6px 12px;
-  margin-left: 12px;
   cursor: pointer;
   transition: color .3s, border-color .3s;
 }
@@ -414,7 +413,6 @@ body.letterbox .window { inset: var(--lb) var(--win-side) max(var(--win-bottom),
 .hud__letterbox:hover,
 .hud__explode:hover,
 .hud__letterbox[aria-pressed="true"] { color: var(--paper); border-color: var(--amber); }
-.hud__explode { margin-left: 0; }
 .hud__letterbox:focus-visible,
 .hud__explode:focus-visible { outline: 1px solid var(--amber); outline-offset: 3px; }
 
