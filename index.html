@@ -17,6 +17,8 @@
   <!-- ▶ PARALLAX: all of it is in parallax.css (steps 1–5) -->
   <link rel="stylesheet" href="parallax.css">
   <script src="parallax-fallback.js" defer></script>
+  <link rel="stylesheet" href="exploded.css">
+  <script src="exploded.js" defer></script>
 </head>
 <body>
 
@@ -36,11 +38,13 @@
     <!-- 1 · Departure -->
     <section class="scene scene--departure" aria-labelledby="t1">
       <div class="stage">
-        <div class="layer layer--sky"><img src="assets/s1-city-dusk.webp" alt="" fetchpriority="high"></div>
-        <div class="layer layer--far   silhouette s1-city"></div>
-        <div class="layer layer--mid   silhouette s1-catenary"></div>
-        <div class="layer layer--near  silhouette s1-platform"></div>
-        <div class="layer layer--flare flares"></div>
+        <div class="rig">
+          <div class="layer layer--sky"><img src="assets/s1-city-dusk.webp" alt="" fetchpriority="high"></div>
+          <div class="layer layer--far   silhouette s1-city"></div>
+          <div class="layer layer--mid   silhouette s1-catenary"></div>
+          <div class="layer layer--near  silhouette s1-platform"></div>
+          <div class="layer layer--flare flares"></div>
+        </div>
         <p class="caption"><time>21:47</time><span id="t1">Bruxelles-Midi</span></p>
       </div>
     </section>
@@ -48,12 +52,14 @@
     <!-- 2 · Countryside, blue hour -->
     <section class="scene scene--country" aria-labelledby="t2">
       <div class="stage">
-        <div class="layer layer--sky"><img src="assets/s2-fog-field.webp" alt="" decoding="async"></div>
-        <div class="layer layer--far   silhouette s2-hills"></div>
-        <div class="haze"></div>
-        <div class="layer layer--mid   silhouette s2-trees"></div>
-        <div class="layer layer--near  silhouette s2-poles"></div>
-        <div class="layer layer--front silhouette s2-grass"></div>
+        <div class="rig">
+          <div class="layer layer--sky"><img src="assets/s2-fog-field.webp" alt="" decoding="async"></div>
+          <div class="layer layer--far   silhouette s2-hills"></div>
+          <div class="haze"></div>
+          <div class="layer layer--mid   silhouette s2-trees"></div>
+          <div class="layer layer--near  silhouette s2-poles"></div>
+          <div class="layer layer--front silhouette s2-grass"></div>
+        </div>
         <p class="caption"><time>22:31</time><span id="t2">Hesbaye</span></p>
       </div>
     </section>
@@ -61,12 +67,14 @@
     <!-- 3 · Deep night, sodium light -->
     <section class="scene scene--night" aria-labelledby="t3">
       <div class="stage">
-        <div class="layer layer--sky"><img src="assets/s3-sodium-station.webp" alt="" decoding="async"></div>
-        <div class="layer layer--far   silhouette s3-industry"></div>
-        <div class="layer layer--mid   silhouette s3-yard"></div>
-        <div class="layer layer--near  silhouette s3-catenary"></div>
-        <div class="layer layer--flare flares"></div>
-        <div class="layer layer--glass rain"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="rig">
+          <div class="layer layer--sky"><img src="assets/s3-sodium-station.webp" alt="" decoding="async"></div>
+          <div class="layer layer--far   silhouette s3-industry"></div>
+          <div class="layer layer--mid   silhouette s3-yard"></div>
+          <div class="layer layer--near  silhouette s3-catenary"></div>
+          <div class="layer layer--flare flares"></div>
+          <div class="layer layer--glass rain"><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
         <p class="caption"><time>02:14</time><span id="t3">Hamm</span></p>
       </div>
     </section>
@@ -74,10 +82,12 @@
     <!-- 4 · Arrival, dawn -->
     <section class="scene scene--arrival" aria-labelledby="t4">
       <div class="stage">
-        <div class="layer layer--sky"><img src="assets/s4-berlin-dawn.webp" alt="" decoding="async"></div>
-        <div class="layer layer--far   silhouette s4-blocks"></div>
-        <div class="layer layer--mid   silhouette s4-canopy"></div>
-        <div class="layer layer--near  silhouette s4-platform"></div>
+        <div class="rig">
+          <div class="layer layer--sky"><img src="assets/s4-berlin-dawn.webp" alt="" decoding="async"></div>
+          <div class="layer layer--far   silhouette s4-blocks"></div>
+          <div class="layer layer--mid   silhouette s4-canopy"></div>
+          <div class="layer layer--near  silhouette s4-platform"></div>
+        </div>
         <p class="caption"><time>06:58</time><span id="t4">Berlin Gesundbrunnen</span></p>
       </div>
     </section>
@@ -119,6 +129,7 @@
     <span class="route"><span class="route__progress"></span></span>
     <span class="hud__stop">BER</span>
     <button class="hud__letterbox" type="button" aria-pressed="false">2.39 : 1</button>
+    <button class="hud__explode" type="button" aria-pressed="false" title="Exploded view (E)">Layers</button>
   </nav>
 
   <script>

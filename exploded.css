@@ -1,0 +1,80 @@
+/* =========================================================
+   exploded.css: press E (or "Layers") to see the scene from
+   the side, every layer pulled apart as a flat sheet.
+   A teaching tool; the parallax itself is all in parallax.css.
+
+   Why it lives on .rig, not .stage: .stage fades with opacity
+   and clips with overflow, and either one flattens 3D. .rig sits
+   inside it and has neither, so preserve-3d survives. The stage
+   just shows the finished 3D picture as a flat image.
+   ========================================================= */
+
+.stage { perspective: 2200px; }
+
+.rig {
+  transform-style: preserve-3d;
+  transition: transform 1.4s cubic-bezier(.65, 0, .25, 1);
+}
+
+/* 3D uses `transform`; the parallax uses `translate`. Separate
+   properties, so they stack instead of overwriting each other. */
+.rig > * {
+  transition: transform 1.4s cubic-bezier(.65, 0, .25, 1), outline-color .6s;
+  outline: 1px solid transparent;
+}
+
+/* depth of each sheet, far to near (pixels toward the viewer) */
+.layer--sky   { --z: -700px; }
+.haze         { --z: -470px; }
+.layer--far   { --z: -400px; }
+.layer--mid   { --z: -120px; }
+.layer--near  { --z: 200px; }
+.layer--front { --z: 420px; }
+.layer--flare { --z: 520px; }
+.layer--glass { --z: 620px; }
+
+.exploded .rig {
+  transform: translate(4vw, -2vh) rotateX(20deg) rotateY(30deg) scale(.58);
+}
+
+.exploded .rig > * {
+  transform: translateZ(var(--z, 0));
+  outline-color: rgba(240, 163, 92, .55);
+}
+
+/* Each layer is wider than the screen (that's how it can slide).
+   While exploded, clip it to the slice that's on screen right now,
+   so every sheet is one screen wide and the content slides through it.
+   Same timeline as `travel`, so the two stay in lockstep. */
+@keyframes on-screen-slice {
+  from { clip-path: inset(0 calc(var(--speed) * var(--travel)) 0 0); }
+  to   { clip-path: inset(0 0 0 calc(var(--speed) * var(--travel))); }
+}
+
+.exploded .rig > .layer {
+  animation-name: travel, on-screen-slice;
+  background-color: rgba(140, 175, 190, .05);
+}
+
+/* labels, made by exploded.js: one per layer, at the same depth */
+.layer-label {
+  position: absolute;
+  left: 2vw;
+  font-family: var(--mono);
+  font-size: 22px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--amber);
+  opacity: 0;
+  translate: 0 -150%;
+  transition: transform 1.4s cubic-bezier(.65, 0, .25, 1), opacity .6s;
+}
+
+.exploded .layer-label { opacity: 1; transition-delay: 0s, .8s; }
+
+/* clear the view: no glass effects or captions while exploded */
+.reflection, .vignette, .grain, .caption { transition: opacity .6s; }
+.exploded :is(.reflection, .vignette, .grain, .caption) { opacity: 0; }
+
+.hud__explode[aria-pressed="true"] { color: var(--paper); border-color: var(--amber); }

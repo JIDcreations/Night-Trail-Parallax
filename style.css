@@ -47,6 +47,12 @@ body {
   background: var(--ink);
 }
 
+/* holds a scene's layers; exploded.css turns it in 3D */
+.rig {
+  position: absolute;
+  inset: 0;
+}
+
 .layer {
   position: absolute;
   inset: 0 auto 0 0;
@@ -391,7 +397,8 @@ body.letterbox .window { inset: var(--lb) var(--win-side) max(var(--win-bottom),
   box-shadow: 0 0 12px var(--sodium);
 }
 
-.hud__letterbox {
+.hud__letterbox,
+.hud__explode {
   font: inherit;
   letter-spacing: inherit;
   color: inherit;
@@ -405,11 +412,14 @@ body.letterbox .window { inset: var(--lb) var(--win-side) max(var(--win-bottom),
 }
 
 .hud__letterbox:hover,
+.hud__explode:hover,
 .hud__letterbox[aria-pressed="true"] { color: var(--paper); border-color: var(--amber); }
-.hud__letterbox:focus-visible { outline: 1px solid var(--amber); outline-offset: 3px; }
+.hud__explode { margin-left: 0; }
+.hud__letterbox:focus-visible,
+.hud__explode:focus-visible { outline: 1px solid var(--amber); outline-offset: 3px; }
 
 @media (max-width: 640px) {
-  .hud__letterbox { display: none; }
+  .hud__letterbox, .hud__explode { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
